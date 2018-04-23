@@ -117,7 +117,7 @@
 		<property name="configLocation"
 			value="classpath:quartz.properties"></property>
 	</bean>
-	
+	<!--  
 	<task:scheduler id="scheduler" pool-size="18" />  
 	<task:scheduled-tasks scheduler="scheduler"> 
 		<task:scheduled ref="QQDataService" method="blackUrlDistributeCompareTable" cron="0 */10 * * * ?"/> 
@@ -143,7 +143,7 @@
 		<task:scheduled ref="QQDataService" method="importantHost" cron="0 */10 * * * ?"/> 
 		<task:scheduled ref="QQDataService" method="importantHostMonitorResult" cron="0 */10 * * * ?"/> 
 	</task:scheduled-tasks>
-	 
+	 -->
 	
 	
 	

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.gcexe.qqdata.persistence.dao.ImportantHostMapper">
+	<resultMap id="BaseResultMap"
+		type="com.gcexe.qqdata.persistence.entity.ImportantHost">
+		<id column="city" property="city" jdbcType="VARCHAR" />
+		<id column="cnt" property="cnt" jdbcType="INTEGER" />
+		<id column="province" property="province" jdbcType="VARCHAR" />
+		<result column="ts" property="ts" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="hostStatistics"
+		type="com.gcexe.qqdata.persistence.statistics.ImportntHostStatistics">
+		<id column="city" property="city" jdbcType="VARCHAR" />
+		<id column="mr_cnt" property="mrCnt" jdbcType="INTEGER" />
+		<id column="host_cnt" property="hostCnt" jdbcType="INTEGER" />
+		
+	</resultMap>
+	<sql id="Base_Column_List">
+		city, cnt, province, ts
+	</sql>
+	<select id="getStatisticsNum" resultType="java.lang.Integer">
+		select COALESCE(SUM(cnt),0) as cnt from important_host where city &lt;&gt;'
+		' and city &lt;&gt; '' and city is not null
+	</select>
+
+	<select id="selectOrder" resultMap="hostStatistics">
+		select (c.host_cnt + c.mr_cnt) as cc,c.* from 
+		(select a.city,COALESCE(a.cnt,0) as host_cnt,COALESCE(b.cnt,0) as mr_cnt from
+		(select * from important_host where city &lt;&gt;' ' and city &lt;&gt; '' and city
+		is not null order by cnt desc)a
+		left join
+		(select * from important_host_monitor_result where city &lt;&gt;' ' and city &lt;&gt; ''
+		and city is not null order by cnt desc)b
+		on a.city = b.city)c
+		order by cc desc
+	</select>
+
+	<insert id="insert"
+		parameterType="com.gcexe.qqdata.persistence.entity.ImportantHost">
+		insert into important_host (city, cnt, province,
+		ts)
+		values (#{city,jdbcType=VARCHAR}, #{cnt,jdbcType=INTEGER},
+		#{province,jdbcType=VARCHAR},
+		#{ts,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.gcexe.qqdata.persistence.entity.ImportantHost">
+		insert into important_host
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="city != null">
+				city,
+			</if>
+			<if test="cnt != null">
+				cnt,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="ts != null">
+				ts,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="cnt != null">
+				#{cnt,jdbcType=INTEGER},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="ts != null">
+				#{ts,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.gcexe.qqdata.persistence.entity.ImportantHost">
+		update important_host
+		<set>
+			<if test="ts != null">
+				ts = #{ts,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where city = #{city,jdbcType=VARCHAR}
+		and cnt = #{cnt,jdbcType=INTEGER}
+		and province = #{province,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.gcexe.qqdata.persistence.entity.ImportantHost">
+		update important_host
+		set ts = #{ts,jdbcType=TIMESTAMP}
+		where city = #{city,jdbcType=VARCHAR}
+		and cnt = #{cnt,jdbcType=INTEGER}
+		and province = #{province,jdbcType=VARCHAR}
+	</update>
+</mapper>
