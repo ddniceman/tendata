@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.gcexe.qqdata.persistence.dao.BlackUrlDistributeCompareTableMapper">
+	<resultMap id="BaseResultMap"
+		type="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable">
+		<id column="city" property="city" jdbcType="VARCHAR" />
+		<id column="country" property="country" jdbcType="VARCHAR" />
+		<id column="province" property="province" jdbcType="VARCHAR" />
+		<id column="ts" property="ts" jdbcType="TIMESTAMP" />
+		<result column="cnt" property="cnt" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		city, country, province, ts, cnt
+	</sql>
+	<resultMap id="statisticsView"
+		type="com.gcexe.qqdata.persistence.statistics.StatisticsView">
+		<id column="_key" property="key" jdbcType="VARCHAR" />
+		<id column="_value" property="value" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="dayNum" resultType="java.lang.Integer">
+		SELECT COALESCE(SUM(cnt),0) as
+		cnt
+		from black_url_distribute_compare_table
+		where DAYOFYEAR(ts) =
+		DAYOFYEAR(NOW())
+	</select>
+
+	<select id="nowNum" resultType="java.lang.Integer">
+		select COALESCE(SUM(cnt),0) as
+		cnt
+		from black_url_distribute_compare_table
+		where hour(ts) = hour(NOW())
+		and DAYOFYEAR(ts) = DAYOFYEAR(NOW())
+	</select>
+	<select id="yestodayNum" resultType="java.lang.Integer">
+		SELECT COALESCE(SUM(cnt),0)
+		as cnt
+		from black_url_distribute_compare_table
+		where DATEDIFF(NOW(),ts)
+		= 1 and hour(ts) = hour(NOW())
+	</select>
+	<select id="weekNum" resultType="java.lang.Integer">
+		select COALESCE(SUM(cnt),0) as
+		cnt
+		from black_url_distribute_compare_table
+		where week(ts) = week(NOW())
+		and hour(ts) = hour(NOW())
+	</select>
+	<select id="upWeekNum" resultType="java.lang.Integer">
+		select COALESCE(SUM(cnt),0) as
+		cnt
+		from black_url_distribute_compare_table
+		where week(ts) =
+		(week(NOW())-1) and hour(ts) = hour(NOW())
+	</select>
+	<select id="getUrlOrder" resultMap="statisticsView">
+		select SUM(cnt) as _value
+		,city as _key
+		from black_url_distribute_compare_table
+		GROUP BY city
+		order by cnt desc;
+	</select>
+
+	<select id="getUrlRatio" resultMap="statisticsView">
+		select SUM(cnt) as _value ,
+		case evilclass when 1 then '社工欺诈'
+		when 2 then '信息诈骗'
+		when 3 then '虚假广告'
+		when 4 then '恶意文件'
+		when 5 then '博彩网站'
+		when 6 then '色情网站'
+		end as _key
+		from
+		black_url_evilclass_distribute
+		where evilclass in (1,2,3,4,5,6)
+		group BY
+		evilclass
+	</select>
+	<select id="getUrlView" resultMap="statisticsView">
+		select sum(cnt) as
+		_value,DATE_FORMAT(ts,'%m-%d') as _key from
+		(select
+		cnt,ts,DAYOFYEAR(ts) as days from
+		black_url_distribute_compare_table)a
+		where (DAYOFYEAR(now()) - a.days)&lt;=7
+		group by a.days
+	</select>
+	<select id="getUrlDayView" resultMap="statisticsView">
+		select sum(cnt) as _value
+		,DATE_FORMAT(ts,'%H-%i') as _key from
+		(select cnt,ts,hour(ts) as hours
+		from black_url_distribute_compare_table
+		where DAYOFYEAR(now()) =
+		DAYOFYEAR(ts))a
+		where hour(now())-hour(ts)&lt;=8
+		group by a.hours
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTableKey">
+		select
+		<include refid="Base_Column_List" />
+		from black_url_distribute_compare_table
+		where city =
+		#{city,jdbcType=VARCHAR}
+		and country = #{country,jdbcType=VARCHAR}
+		and
+		province = #{province,jdbcType=VARCHAR}
+		and ts =
+		#{ts,jdbcType=TIMESTAMP}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTableKey">
+		delete from black_url_distribute_compare_table
+		where city
+		= #{city,jdbcType=VARCHAR}
+		and country = #{country,jdbcType=VARCHAR}
+		and province = #{province,jdbcType=VARCHAR}
+		and ts =
+		#{ts,jdbcType=TIMESTAMP}
+	</delete>
+	<insert id="insert"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable">
+		insert into black_url_distribute_compare_table (city,
+		country,
+		province,
+		ts, cnt)
+		values (#{city,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{ts,jdbcType=TIMESTAMP}, #{cnt,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable">
+		insert into black_url_distribute_compare_table
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="city != null">
+				city,
+			</if>
+			<if test="country != null">
+				country,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="ts != null">
+				ts,
+			</if>
+			<if test="cnt != null">
+				cnt,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="country != null">
+				#{country,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="ts != null">
+				#{ts,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cnt != null">
+				#{cnt,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable">
+		update black_url_distribute_compare_table
+		<set>
+			<if test="cnt != null">
+				cnt = #{cnt,jdbcType=INTEGER},
+			</if>
+		</set>
+		where city = #{city,jdbcType=VARCHAR}
+		and country =
+		#{country,jdbcType=VARCHAR}
+		and province = #{province,jdbcType=VARCHAR}
+		and ts = #{ts,jdbcType=TIMESTAMP}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable">
+		update black_url_distribute_compare_table
+		set cnt =
+		#{cnt,jdbcType=INTEGER}
+		where city = #{city,jdbcType=VARCHAR}
+		and
+		country = #{country,jdbcType=VARCHAR}
+		and province =
+		#{province,jdbcType=VARCHAR}
+		and ts = #{ts,jdbcType=TIMESTAMP}
+	</update>
+</mapper>

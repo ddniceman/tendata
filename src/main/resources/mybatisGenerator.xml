@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="C:/Users/ zhoujian/.m2/repository/mysql/mysql-connector-java/5.1.14/mysql-connector-java-5.1.14.jar" />
+	<context id="context1">
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/qqdata" userId="root"
+			password="123456" />
+		<!-- 生成模型的包名和位置 -->
+		<javaModelGenerator targetPackage="com.gcexe.qqdata.persistence.entity"
+			targetProject="qqdata" />
+		<!-- 生成映射文件的包名和位置 -->
+		<sqlMapGenerator targetPackage="com.gcexe.qqdata.persistence.mapping"
+			targetProject="qqdata" />
+			
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator targetPackage="com.gcexe.qqdata.persistence.dao"
+			targetProject="qqdata" type="XMLMAPPER" />
+		<!-- 要生成的表 -->
+		 
+		<table tableName="black_url_distribute_compare_table" domainObjectName="BlackUrlDistributeCompareTable"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="black_url_distribute_table" domainObjectName="BlackUrlDistributeTable"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="black_url_evilclass_distribute" domainObjectName="BlackUrlEvilclassDistribute"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="black_url_history_data" domainObjectName="BlackUrlHistoryData"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<!-- 
+		<table tableName="ddos_cnt_history" domainObjectName="DdosCntHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ddos_cpt_ten_day_history" domainObjectName="DdosCptTenDayHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ddos_new_cnt_history" domainObjectName="DdosNewCntHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ddos_new_cpt_ten_day_history" domainObjectName="DdosNewCptTenDayHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>-->
+		<!--
+		<table tableName="important_host" domainObjectName="ImportantHost"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="important_host_monitor_result" domainObjectName="ImportantHostMonitorResult"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>-->
+		<!--
+		<table tableName="mobile_virus_province_city_stat_history" domainObjectName="MobileVirusProvinceCityStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="mobile_virus_province_stat_history" domainObjectName="MobileVirusProvinceStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="mobile_virus_type_stat_history" domainObjectName="MobileVirusTypeStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		
+		<table tableName="pc_virus_province_city_stat_history" domainObjectName="PcVirusProvinceCityStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="pc_virus_province_stat_history" domainObjectName="PcVirusProvinceStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="pc_virus_type_stat_history" domainObjectName="PcVirusTypeStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="pc_virustype_province_stat_history" domainObjectName="PcVirustypeProvinceStatHistory"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+		</table>
+		-->
+		
+	</context>
+</generatorConfiguration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
