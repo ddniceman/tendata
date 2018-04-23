@@ -38,8 +38,8 @@ public class User {
 		reqinfo.element("country", "中国");
 		reqinfo.element("province", "新疆");
 		reqinfo.element("city", "0");
-		reqinfo.element("endTime", QQDataService.getQQEndTime());
-		reqinfo.element("startTime",QQDataService.getQQStartTime());
+//		reqinfo.element("endTime", QQDataService.getQQEndTime());
+//		reqinfo.element("startTime",QQDataService.getQQStartTime());
 		reqinfo.element("type", 153);
 		postUrls.add(reqinfo);
 		//===========加密reqinfo=============

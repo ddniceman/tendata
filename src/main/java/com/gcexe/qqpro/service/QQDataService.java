@@ -5,6 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.gcexe.qqdata.persistence.dao.BlackUrlDistributeCompareTableMapper;
+import com.gcexe.qqdata.persistence.entity.BlackUrlDistributeCompareTable;
 import com.gcexe.qqpro.qqaes.AesException;
 import com.gcexe.qqpro.qqaes.WXBizMsgCrypt;
 import com.gcexe.qqpro.utils.ITools;
@@ -14,11 +19,17 @@ import com.gcexe.qqpro.utils.Tools;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-
+@Component
 public class QQDataService {
+
+	@Autowired
+	private ITools itools;
+	@Autowired
+	private BlackUrlDistributeCompareTableMapper blackUrlDistributeCompareTableMapper;
 	
-	public static String getQQData(String country, String province, String city,  int type)
-			throws AesException {
+	
+	private String getQQData(String country, String province, String city, int type)
+			throws AesException, UnsupportedEncodingException {
 		ITools itool = new Tools();
 		// ===========生成sign================
 		long timeStamp = new Date().getTime() / 1000;
@@ -55,39 +66,74 @@ public class QQDataService {
 		httpProto.element("reqinfo", miwen);
 
 		String result = itool.sendPost("http://sa.cloud.urlsec.qq.com", httpProto.toString());
-		JSONObject resultObj = JSONObject.fromObject(result);	
+		JSONObject resultObj = JSONObject.fromObject(result);
 		int status = resultObj.getInt("status");
-		if(status==0)
-		{
-			String str =  resultObj.getString("rsp");
-			String resultStr = str.substring(2, str.length()-2);
-			byte [] mingwen = pc.decrypt(resultStr);
-			try {
-				String success = new String(mingwen,"UTF-8");
+		if (status == 0) {
+			if (result.indexOf("rs") != -1) {
+				String str = resultObj.getString("rsp");
+				String resultStr = str.substring(2, str.length() - 2);
+				byte[] mingwen = pc.decrypt(resultStr);
+				String success = new String(mingwen, "UTF-8");
 				return success;
-			} catch (UnsupportedEncodingException e) {
-				
-			}catch(Exception e)
-			{
-				
 			}
 		}
 		return null;
 	}
 
-	public static long getQQStartTime() {
+	private long getQQStartTime() {
+		GregorianCalendar gre = new GregorianCalendar();
+		gre.setTime(getBeforDate(-1));
+		gre.add(Calendar.MINUTE, -10);
+		return gre.getTimeInMillis() / 1000;
+	}
+
+	private long getQQEndTime() {
+		GregorianCalendar gre = new GregorianCalendar();
+		gre.setTime(getBeforDate(-1));
+		return gre.getTimeInMillis() / 1000;
+	}
+
+	private Date getBeforDate(int hour) {
 		GregorianCalendar gre = new GregorianCalendar();
 		gre.setTime(new Date());
-		//gre.add(Calendar.HOUR, -1);
-		gre.add(Calendar.MINUTE,-40);
-		return gre.getTimeInMillis()/1000;
+		gre.add(Calendar.HOUR, hour);
+		return new Date(gre.getTimeInMillis());
+	}
+
+	// 重点网站 153 black_url_distribute_compare_table
+	public void getBlackUrlDistributeCompareTable() {
+		try {
+			String result = this.getQQData("中国", "新疆", "0", 153);
+			if(result != null && result.indexOf("body")!=-1)
+			{
+				JSONObject resultObj = JSONObject.fromObject(result);
+				JSONArray  arrayObj = JSONArray.fromObject(resultObj.get("body"));		
+				for (int i = 0; i < arrayObj.size(); i++) {
+					JSONObject obj = arrayObj.getJSONObject(i);
+					BlackUrlDistributeCompareTable blackUrlDistributeCompareTable = new BlackUrlDistributeCompareTable();
+					blackUrlDistributeCompareTable.setCity(obj.getString("city"));
+					blackUrlDistributeCompareTable.setCountry(obj.getString("country"));
+					blackUrlDistributeCompareTable.setProvince(obj.getString("province"));
+					blackUrlDistributeCompareTable.setCnt(obj.getInt("cnt"));
+					blackUrlDistributeCompareTable.setTs(itools.formatDate(obj.getString("ts"), "yyyy-MM-dd HH:mm:ss"));
+					blackUrlDistributeCompareTableMapper.insertSelective(blackUrlDistributeCompareTable);
+				}
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AesException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	
-	public static long getQQEndTime() {
-		GregorianCalendar gre = new GregorianCalendar();
-		gre.setTime(new Date());
-		gre.add(Calendar.MINUTE,-30);
-		return gre.getTimeInMillis()/1000;
-	}
+	
+	
+	
+	
+	
 }

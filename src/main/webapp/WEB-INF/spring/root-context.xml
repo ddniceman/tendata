@@ -110,15 +110,18 @@
 	
 	
 	
-	<context:component-scan
-		base-package="com.gcexe.qqpro.taskservice" />
+	<context:component-scan base-package="com.gcexe.qqpro" />
+
 	<bean name="quartzScheduer"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation"
 			value="classpath:quartz.properties"></property>
 	</bean>
-	
-	
+	<!-- 
+	<task:scheduled-tasks > 
+		<task:scheduled ref="QQDataService" method="getBlackUrlDistributeCompareTable" cron="*/1 * * * * ?"/> 
+	</task:scheduled-tasks>
+	 -->
 	
 	
 	

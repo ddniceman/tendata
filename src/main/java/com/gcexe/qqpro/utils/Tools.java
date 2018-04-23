@@ -220,6 +220,7 @@ public class Tools implements ITools {
 		return folder;
 	}
 
+	
 	// 字符串转时间
 	public Date formatDate(String date, String format) {
 
@@ -445,8 +446,5 @@ public class Tools implements ITools {
 		}
 		return result;
 	}
-
-	
-	
 
 }
