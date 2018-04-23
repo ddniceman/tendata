@@ -103,6 +103,7 @@ public class QQDataService {
 	// 重点网站 153 black_url_distribute_compare_table
 	public void getBlackUrlDistributeCompareTable() {
 		try {
+			//获取qq数据
 			String result = this.getQQData("中国", "新疆", "0", 153);
 			if(result != null && result.indexOf("body")!=-1)
 			{
