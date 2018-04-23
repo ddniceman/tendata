@@ -117,11 +117,33 @@
 		<property name="configLocation"
 			value="classpath:quartz.properties"></property>
 	</bean>
-	<!-- 
-	<task:scheduled-tasks > 
-		<task:scheduled ref="QQDataService" method="getBlackUrlDistributeCompareTable" cron="*/1 * * * * ?"/> 
+	
+	<task:scheduler id="scheduler" pool-size="18" />  
+	<task:scheduled-tasks scheduler="scheduler"> 
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeCompareTable" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeTable" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlEvilclassDistribute" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlHistoryData" cron="0 */10 * * * ?"/> 
+		
+		<task:scheduled ref="QQDataService" method="ddosCptTenDayHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="ddosNewCptTenDayHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="ddosCntHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="ddosNewCntHistory" cron="0 */10 * * * ?"/> 
+		
+		<task:scheduled ref="QQDataService" method="pcVirustypeProvinceStatHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="pcVirusProvinceCityStatHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="pcVirusProvinceStatHistory" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="pcVirusTypeStatHistory" cron="0 */10 * * * ?"/> 
+		
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeCompareTable" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeTable" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeCompareTable" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="blackUrlDistributeTable" cron="0 */10 * * * ?"/> 
+		
+		<task:scheduled ref="QQDataService" method="importantHost" cron="0 */10 * * * ?"/> 
+		<task:scheduled ref="QQDataService" method="importantHostMonitorResult" cron="0 */10 * * * ?"/> 
 	</task:scheduled-tasks>
-	 -->
+	 
 	
 	
 	

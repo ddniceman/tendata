@@ -17,7 +17,10 @@ public class DataController {
 	@RequestMapping(value = "/qqjob")
 	@ResponseBody
 	public ResultCodeVo qqData() {
-		dataService.getBlackUrlDistributeCompareTable();
+		dataService.importantHostMonitorResult();
+		//dataService.importantHost();
+		//dataService.pcVirusProvinceStatHistory();
+		//dataService.pcVirusTypeStatHistory();
 		ResultCodeVo resultCoceVo = new ResultCodeVo(true, 0, "成功", null);
 		return resultCoceVo;
 	}
